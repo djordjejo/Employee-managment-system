@@ -1,5 +1,5 @@
 import { CircleCheck } from 'lucide-react';
-import Button from './Button';
+import Button from '../../../components/Button';
 const benefits = [
   'Reduce administrative overhead by up to 60%',
   'Improve employee engagement and satisfaction',
