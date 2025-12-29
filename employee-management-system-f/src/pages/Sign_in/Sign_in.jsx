@@ -1,4 +1,4 @@
-import SignInHeader from "./components/Sign_in_header";
+import Header from "../../components/Header.jsx";
 import SignInHero from "./components/Sign_in_hero";
 import SignInSocial from "./components/SignInSocial";
 import Input from "../../components/Input.jsx";
@@ -7,7 +7,9 @@ export default function SignIn() {
   return (
     <div className="flex min-h-screen">
       <div className="w-1/2 bg-white flex flex-col justify-between p-8">
-        <SignInHeader />
+        <Header 
+        title="EmployeeHub"
+        imgSrc="../../../public/images/logo.webp"/>
         <div className="flex-1 flex items-center justify-center">
           <SignInHero />
         </div>
@@ -28,7 +30,7 @@ export default function SignIn() {
         </div>
       </div>
 
-      <div className="w-1/2 bg-blue-500 flex items-center justify-center">
+      <div className="w-1/2 bg-[#4988C4] flex items-center justify-center">
         
         <img
           src="../../../public/images/SignInIlustration.png"
