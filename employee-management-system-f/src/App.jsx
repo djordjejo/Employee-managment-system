@@ -8,8 +8,8 @@ export default function App() {
     <Routes>
    
       <Route path="/" element={<Landing_page />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/getstarted" element={<GetStarted />} />"
+      <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/get-started" element={<GetStarted />} />"
       <Route path="/mainPage" element={<Owner />} />"
     </Routes>
   );
