@@ -1,0 +1,19 @@
+﻿using System.Reflection;
+
+namespace employee_management_system_b.Models
+{
+    public class Company
+    {
+        public Guid Id{ get; set; }
+        public string Name{ get; set; }
+        public string Email{ get; set; }
+        public string Password{ get; set; }
+        public string PhoneNumber { get; set; }
+
+
+
+        public ICollection<Department> Departments { get; set; } = new List<Department>();
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
+    }
+}
