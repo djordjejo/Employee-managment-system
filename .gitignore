@@ -1,11 +1,41 @@
 # Visual Studio
-
 .vs/
-
-*.user
-
 *.suo
-
+*.user
 *.userosscache
-
 *.sln.docstates
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+*.dll
+*.exe
+*.pdb
+
+# Rider
+.idea/
+
+# ASP.NET / .NET
+appsettings.Development.json
+*.db
+*.log
+
+# EF Core Migrations (samo ako hoćeš, inače čuvaj)
+# Migrations/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuget.cache
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Visual Studio Code
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store
