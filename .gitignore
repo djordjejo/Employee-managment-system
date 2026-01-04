@@ -8,4 +8,5 @@
 
 *.userosscache
 
-*.sln.docstates
+*.sln.docstates/bin/
+/obj/
