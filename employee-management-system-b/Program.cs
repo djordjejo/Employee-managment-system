@@ -1,4 +1,6 @@
 using employee_management_system_b.Data;
+using employee_management_system_b.Repositories;
+using employee_management_system_b.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDb>(options =>
 options.UseSqlServer((builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
