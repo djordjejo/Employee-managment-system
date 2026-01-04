@@ -1,11 +1,17 @@
-# Visual Studio
-
-.vs/
-
-*.user
-
+/bin/
+/obj/.vs/
+bin/
+obj/
 *.suo
-
+*.user
 *.userosscache
-
 *.sln.docstates
+appsettings.Development.json
+*.db
+*.log
+project.assets.json
+.vs/
+*.suo
+*.user
+bin/
+obj/
