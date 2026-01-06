@@ -1,6 +1,6 @@
 import SideBar from  "./components/SideBar.jsx";
 import Filter from "./components/Filter.jsx";
-import EmployeeRow from "./components/EmployeeRow.jsx"; 
+import EmployeeList from "./components/EmployeeList.jsx"; 
 export default function Owner() {
     return (
         
@@ -40,45 +40,7 @@ export default function Owner() {
           <Filter label="Designation" />
         </div>
 
-      
-        <div className="bg-white rounded-xl shadow">
-          <table className="w-full text-sm">
-            <thead className="text-left text-gray-500 border-b">
-              <tr>
-                <th className="p-4">Name</th>
-                <th>ID</th>
-                <th>E-mail</th>
-                <th>Department</th>
-                <th>Designation</th>
-                <th className="p-4">Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <EmployeeRow
-                name="Riyad Ahmad"
-                email="uiriyad@gmail.com"
-                department="Art & Design"
-                deptColor="bg-purple-100 text-purple-600"
-                role="Sr Product Designer"
-              />
-              <EmployeeRow
-                name="Charles T"
-                email="ahmedriyad338@gmail.com"
-                department="Development"
-                deptColor="bg-emerald-100 text-emerald-600"
-                role="Sr UI Designer"
-              />
-              <EmployeeRow
-                name="Nahid Miah"
-                email="uiriyad1999@gmail.com"
-                department="UI/UX Design"
-                deptColor="bg-orange-100 text-orange-600"
-                role="Jr UX Designer"
-              />
-            </tbody>
-          </table>
-        </div>
+        <EmployeeList />
       </main>
     </div>
   );
