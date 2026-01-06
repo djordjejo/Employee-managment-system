@@ -17,17 +17,17 @@ namespace employee_management_system_b.Repositories
             this.dbSet = context.Set<T>();
         }
 
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            throw new NotImplementedException();
+           await dbSet.AddAsync(entity);
         }
 
         public void Delete(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
 
-        public void DeleteAll()
+        public Task DeleteAll()
         {
             throw new NotImplementedException();
         }
@@ -37,14 +37,16 @@ namespace employee_management_system_b.Repositories
           return await dbSet.ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await dbSet.FindAsync(id);
         }
 
         public void Update(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Update(entity);
         }
+
+       
     }
 }

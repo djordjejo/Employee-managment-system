@@ -2,12 +2,12 @@
 {
     public interface IRepository<T> where T : class
     {
-        void Add(T entity);
+        Task Add(T entity);
         void Update(T entity);
         void Delete(T entity);
-        T GetById(int id);
-        IEnumerable<T> GetAll();
-        void DeleteAll();
+        Task<T> GetById(Guid id);
+        Task<IEnumerable<T>> GetAll();
+        Task DeleteAll();
 
     }
 }
