@@ -34,7 +34,7 @@ namespace employee_management_system_b.Mapping
             // ============================================
 
             // Project → ProjectDto
-            CreateMap<Project, ProjectsDTO>()
+            CreateMap<Project, ProjectDTO>()
                 .ForMember(dest => dest.CompanyName,
                     opt => opt.MapFrom(src => src.Company.Name))
                 .ForMember(dest => dest.Employees,
@@ -55,7 +55,9 @@ namespace employee_management_system_b.Mapping
             // ============================================
 
             CreateMap<Company, CompanyDropdownDTO>();
+            CreateMap<CompanyDTO, Company>().ReverseMap();
             CreateMap<Department, DepartmentDropdownDTO>();
+            CreateMap<Department, DepartmentsDTO>().ReverseMap();
         }
     }
 }

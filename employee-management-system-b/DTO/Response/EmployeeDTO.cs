@@ -16,7 +16,6 @@ namespace employee_management_system_b.DTO.Response
         public Guid DepartmentId { get; set; }
         public string DepartmentName { get; set; }
 
-        // Projekti na kojima radi
-        public List<ProjectBasicDTO> Projects { get; set; } = new();
+        public List<ProjectBasicDTO> Projects { get; private set; } 
     }
 }
