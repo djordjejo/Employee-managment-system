@@ -10,6 +10,6 @@ namespace employee_management_system_b.Repositories.IRepository
         IRepository<Project> Projects  { get; }
         IRepository<EmployeeProject> EmployeeProject { get; }
 
-        void Commit();
+        Task Commit();
     }
 }

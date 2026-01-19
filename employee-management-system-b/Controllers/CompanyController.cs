@@ -11,36 +11,36 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 
-namespace employee_management_system_b.Controllers
+namespace Company_management_system_b.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
+    public class CompanyController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public EmployeesController(IUnitOfWork _unitOfWork, IMapper _mapper)
+        public CompanyController(IUnitOfWork _unitOfWork, IMapper _mapper)
         {
             unitOfWork = _unitOfWork;
             mapper = _mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<List<EmployeeDTO>>> GetAll()
+        public async Task<ActionResult<List<CompanyDTO>>> GetAll()
         {
-            var employees = await unitOfWork.Employees.GetAll(
-               query => query.Include(e => e.Company).Include(e => e.Department)
-                             .Include(e => e.Projects).ThenInclude(ep => ep.Project)
+            var companies = await unitOfWork.Companies.GetAll(
+               query => query.Include(e => e.Employees).Include(e => e.Departments)
+                             .Include(e => e.Projects)
                 );
 
-            var employeeList = employees.ToList();
+            var companyList = companies.ToList();
 
-            var employeeDtos = mapper.Map<List<EmployeeDTO>>(employeeList);
-            return Ok(employeeDtos);
+            var companyDTO = mapper.Map<List<CompanyDTO>>(companyList);
+            return Ok(companyDTO);
         }
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetEmployee(Guid id)
+        public async Task<IActionResult> GetCompany(Guid id)
         {
 
             try
@@ -48,12 +48,12 @@ namespace employee_management_system_b.Controllers
                 if (id == Guid.Empty)
                     return BadRequest("Invalid ID");
 
-                var employee = await unitOfWork.Employees.GetById(id);
+                var company = await unitOfWork.Companies.GetById(id);
 
-                if (employee == null)
+                if (company == null)
                     return NotFound();
 
-                return Ok(mapper.Map<EmployeeDTO>(employee));
+                return Ok(mapper.Map<CompanyDTO>(company));
 
             }
             catch (Exception ex)
@@ -65,19 +65,19 @@ namespace employee_management_system_b.Controllers
         }
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteEmployee(Guid id)
+        public async Task<IActionResult> DeleteCompany(Guid id)
         {
             try
             {
                 if (id == Guid.Empty)
                     return BadRequest("Invalid ID");
 
-                var employee = await unitOfWork.Employees.GetById(id);
+                var company = await unitOfWork.Companies.GetById(id);
 
-                if (employee == null)
+                if (company == null)
                     return NotFound();
 
-                unitOfWork.Employees.Delete(employee);
+                unitOfWork.Companies.Delete(company);
                 unitOfWork.Commit();
                 return NoContent();
             }
@@ -87,21 +87,20 @@ namespace employee_management_system_b.Controllers
             }
 
         }
-
-        [HttpPost("CreateEmployee")]
-        public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDTO employeeDTO)
-         {
+        [HttpPost]
+        public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDTO companyDTO)
+        {
             try
             {
-                if (employeeDTO == null)
-                    return BadRequest("Employee object is null");
-               var employee = mapper.Map<Employee>(employeeDTO);
+                if (companyDTO == null)
+                    return BadRequest("Company object is null");
+               var company = mapper.Map<Company>(companyDTO);
 
-                await unitOfWork.Employees.Add(employee);
-                await unitOfWork.Commit();
+                await unitOfWork.Companies.Add(company);
+                unitOfWork.Commit();
 
-                var createdEmployee = mapper.Map<EmployeeDTO>(employee);
-                return CreatedAtAction(nameof(GetEmployee), new { id = createdEmployee.Id }, createdEmployee);
+                var createdCompany = mapper.Map<CompanyDTO>(companyDTO);
+                return CreatedAtAction(nameof(GetCompany), new { id = createdCompany.Id }, createdCompany);
             }
             catch (Exception ex)
             {
@@ -110,18 +109,18 @@ namespace employee_management_system_b.Controllers
         }
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateEmployee(Guid id, [FromBody] UpdateEmployeeDTO employeeDTO)
+        public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] UpdateCompanyDTO companyDTO)
         {
             try
             {
-                if (id == Guid.Empty || employeeDTO == null)
+                if (id == Guid.Empty || companyDTO == null)
                     return BadRequest("Invalid input");
-                var existingEmployee = await unitOfWork.Employees.GetById(id);
-                if (existingEmployee == null)
+                var existingCompany = await unitOfWork.Companies.GetById(id);
+                if (existingCompany == null)
                     return NotFound();
-                mapper.Map(employeeDTO, existingEmployee);
+                mapper.Map(companyDTO, existingCompany);
                
-                unitOfWork.Employees.Update(existingEmployee);
+                unitOfWork.Companies.Update(existingCompany);
                 unitOfWork.Commit();
                 return NoContent();
             }

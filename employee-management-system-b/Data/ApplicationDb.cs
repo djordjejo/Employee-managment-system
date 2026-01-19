@@ -66,9 +66,7 @@ namespace employee_management_system_b.Data
                 .HasForeignKey(ep => ep.ProjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ================================
-            // Index / Unique constraints (opciono)
-            // ================================
+            
             modelBuilder.Entity<Employee>()
                 .HasIndex(e => e.Email)
                 .IsUnique();

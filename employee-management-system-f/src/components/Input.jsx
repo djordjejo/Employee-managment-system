@@ -1,4 +1,5 @@
 export default function Input({ type, placeholder, value, onChange }) {
+    
     return (
         <input
             type={type}

@@ -1,5 +1,4 @@
 using employee_management_system_b.Data;
-using employee_management_system_b.Mapping;
 using employee_management_system_b.Repositories;
 using employee_management_system_b.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
+app.UseCors("ReactPolicy");
 app.UseAuthorization();
 
 app.MapControllers();

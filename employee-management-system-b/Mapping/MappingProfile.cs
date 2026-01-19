@@ -3,59 +3,72 @@ using employee_management_system_b.DTO.Basics;
 using employee_management_system_b.DTO.Create;
 using employee_management_system_b.DTO.Dropdown;
 using employee_management_system_b.DTO.Response;
+using employee_management_system_b.DTO.Update;
 using employee_management_system_b.Models;
 
-namespace employee_management_system_b.Mapping
+public class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<Employee, EmployeeDTO>()
-             .ForMember(dest => dest.CompanyName,
-                 opt => opt.MapFrom(src => src.Company.Name))
-             .ForMember(dest => dest.DepartmentName,
-                 opt => opt.MapFrom(src => src.Department.Name))
-             .ForMember(dest => dest.Projects,
-                 opt => opt.MapFrom(src => src.Projects.Select(ep => ep.Project)));
+        // ============================================
+        // Employee mappings
+        // ============================================
 
-            // Employee → EmployeeBasicDto
-            CreateMap<Employee, EmployeeBasicDTO>();
+        CreateMap<Employee, EmployeeDTO>()
+            .ForMember(dest => dest.FullName,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+            .ForMember(dest => dest.CompanyName,
+                opt => opt.MapFrom(src => src.Company != null ? src.Company.Name : null))
+            .ForMember(dest => dest.DepartmentName,
+                opt => opt.MapFrom(src => src.Department != null ? src.Department.Name : null))
+            .ForMember(dest => dest.Projects,
+                opt => opt.MapFrom(src => src.Projects
+                    .Where(ep => ep.Project != null)
+                    .Select(ep => ep.Project)));  // ✅ Mapira EmployeeProject → Project
 
-            // Employee → EmployeeDropdownDto
-            CreateMap<Employee, EmployeeDropdownDTO>();
+        CreateMap<Employee, EmployeeBasicDTO>()
+            .ForMember(dest => dest.FullName,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
-            // CreateEmployeeDto → Employee (NE mapiraš Projects ovde)
-            CreateMap<CreateEmployeeDTO, Employee>()
-                .ForMember(dest => dest.Projects, opt => opt.Ignore());
+        CreateMap<Employee, EmployeeDropdownDTO>()
+            .ForMember(dest => dest.FullName,
+                opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
 
-            // ============================================
-            // Project mappings
-            // ============================================
+        CreateMap<CreateEmployeeDTO, Employee>()
+            .ForMember(dest => dest.Projects, opt => opt.Ignore());
 
-            // Project → ProjectDto
-            CreateMap<Project, ProjectsDTO>()
-                .ForMember(dest => dest.CompanyName,
-                    opt => opt.MapFrom(src => src.Company.Name))
-                .ForMember(dest => dest.Employees,
-                    opt => opt.MapFrom(src => src.Employees.Select(ep => ep.Employee)));
+        // ============================================
+        // Project mappings
+        // ============================================
 
-            // Project → ProjectBasicDto
-            CreateMap<Project, ProjectBasicDTO>();
+        CreateMap<Project, ProjectsDTO>()
+            .ForMember(dest => dest.CompanyName,
+                opt => opt.MapFrom(src => src.Company != null ? src.Company.Name : null))
+            .ForMember(dest => dest.Employees,
+                opt => opt.MapFrom(src => src.Employees
+                    .Where(ep => ep.Employee != null)
+                    .Select(ep => ep.Employee)));  // ✅ Mapira EmployeeProject → Employee
 
-            // Project → ProjectDropdownDto
-            CreateMap<Project, ProjectDropdownDTO>();
+        CreateMap<Project, ProjectBasicDTO>();
+        CreateMap<Project, ProjectDropdownDTO>();
+        CreateMap<Project, UpdateProjectDTO>();
+        CreateMap<Project, CreateProjectDTO>();
+        CreateMap<Project, ProjectsDTO>();
+        CreateMap<CreateProjectDTO, Project>()
+            .ForMember(dest => dest.Employees, opt => opt.Ignore());
 
-            // CreateProjectDto → Project
-            CreateMap<CreateProjectDTO, Project>()
-                .ForMember(dest => dest.Employees, opt => opt.Ignore());
+        // ============================================
+        // Company & Department mappings
+        // ============================================
 
-            // ============================================
-            // Company & Department mappings
-            // ============================================
-
-            CreateMap<Company, CompanyDropdownDTO>();
-            CreateMap<Department, DepartmentDropdownDTO>();
-        }
+        CreateMap<Company, CompanyDropdownDTO>();
+        CreateMap<Company, CompanyDTO>().ReverseMap();
+        CreateMap<Company, CreateCompanyDTO>().ReverseMap();
+        CreateMap<Company, UpdateCompanyDTO>().ReverseMap();
+        
+        CreateMap<Department, DepartmentDropdownDTO>();
+        CreateMap<Department, DepartmentsDTO>().ReverseMap();
+        CreateMap<Department, UpdateCompanyDTO>().ReverseMap();
+        CreateMap<Department, CreateDepartmentDTO>().ReverseMap();
     }
 }

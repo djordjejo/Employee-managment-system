@@ -6,17 +6,17 @@ namespace employee_management_system_b.DTO.Create
     {
         [Required]
         [StringLength(200)]
-        public string Name { get; set; }
+        public string Title { get; set; }
         [Required]
         [StringLength(200)]
         public string Description { get; set; }
 
         [Required]
-        public int CompanyId { get; set; }  // Iz dropdown-a
+        public int CompanyId { get; set; }  
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public List<int> EmployeeIds { get; set; } = new();
+        public List<Guid> EmployeeIds{ get; set; } = new();
     }
 }

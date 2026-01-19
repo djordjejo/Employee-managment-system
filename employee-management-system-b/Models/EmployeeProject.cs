@@ -8,9 +8,7 @@
         public Guid ProjectId { get; private set; }
         public Project Project { get; private set; }
 
-        public int AllocationPercentage { get; private set; } // 0–100
-        public DateTime StartDate { get; private set; }
-        public DateTime? EndDate { get; private set; }
+      
     }
 
 }

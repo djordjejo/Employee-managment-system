@@ -11,10 +11,8 @@ namespace employee_management_system_b.Models
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
-
-
-        public ICollection<Department> Departments { get; set; } = new List<Department>();
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
-        public ICollection<Project> Projects { get; set; } = new List<Project>();
+        public ICollection<Department> Departments { get; private set; } = new List<Department>();
+        public ICollection<Employee> Employees { get; private set; } = new List<Employee>();
+        public ICollection<Project> Projects { get; private set; } = new List<Project>();
     }
 }
