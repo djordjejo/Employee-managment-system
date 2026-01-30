@@ -28,9 +28,11 @@ namespace employee_management_system_b.Repositories
             Projects = new Repository<Project>(_context);
             EmployeeProject = new Repository<EmployeeProject>(_context);
         }
+
+
         public async Task Commit()
         {
-            await _context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
     }
 }

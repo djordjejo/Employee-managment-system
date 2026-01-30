@@ -11,49 +11,47 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 
-namespace Company_management_system_b.Controllers
+namespace Project_management_system_b.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : ControllerBase
+    public class ProjectController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public CompanyController(IUnitOfWork _unitOfWork, IMapper _mapper)
+        public ProjectController(IUnitOfWork _unitOfWork, IMapper _mapper)
         {
             unitOfWork = _unitOfWork;
             mapper = _mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<List<CompanyDTO>>> GetAll()
+        public async Task<ActionResult<List<ProjectsDTO>>> GetAll()
         {
-            var companies = await unitOfWork.Companies.GetAll(
-               query => query.Include(e => e.Employees).Include(e => e.Departments)
-                             .Include(e => e.Projects)
+            var projects = await unitOfWork.Projects.GetAll(
+               query => query.Include(e => e.Employees).ThenInclude(ep => ep.Employee)
                 );
 
-            var companyList = companies.ToList();
+            var projectList = projects.ToList();
 
-            var companyDTO = mapper.Map<List<CompanyDTO>>(companyList);
-            return Ok(companyDTO);
+            var projectDTO = mapper.Map<List<ProjectsDTO>>(projectList);
+            return Ok(projectDTO);
         }
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetCompany(Guid id)
+        public async Task<IActionResult> GetProject(Guid id)
         {
-
             try
             {
                 if (id == Guid.Empty)
                     return BadRequest("Invalid ID");
 
-                var company = await unitOfWork.Companies.GetById(id);
+                var Project = await unitOfWork.Projects.GetById(id);
 
-                if (company == null)
+                if (Project == null)
                     return NotFound();
 
-                return Ok(mapper.Map<CompanyDTO>(company));
+                return Ok(mapper.Map<ProjectsDTO>(Project));
 
             }
             catch (Exception ex)
@@ -65,19 +63,19 @@ namespace Company_management_system_b.Controllers
         }
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteCompany(Guid id)
+        public async Task<IActionResult> DeleteProject(Guid id)
         {
             try
             {
                 if (id == Guid.Empty)
                     return BadRequest("Invalid ID");
 
-                var company = await unitOfWork.Companies.GetById(id);
+                var Project = await unitOfWork.Projects.GetById(id);
 
-                if (company == null)
+                if (Project == null)
                     return NotFound();
 
-                unitOfWork.Companies.Delete(company);
+                unitOfWork.Projects.Delete(Project);
                 await unitOfWork.Commit();
                 return NoContent();
             }
@@ -88,19 +86,19 @@ namespace Company_management_system_b.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDTO companyDTO)
+        public async Task<IActionResult> CreateProject([FromBody] CreateProjectDTO projectDTO)
         {
             try
             {
-                if (companyDTO == null)
-                    return BadRequest("Company object is null");
-               var company = mapper.Map<Company>(companyDTO);
+                if (projectDTO == null)
+                    return BadRequest("Project object is null");
+               var Project = mapper.Map<Project>(projectDTO);
 
-                await unitOfWork.Companies.Add(company);
+                await unitOfWork.Projects.Add(Project);
                 await unitOfWork.Commit();
 
-                var createdCompany = mapper.Map<CompanyDTO>(companyDTO);
-                return CreatedAtAction(nameof(GetCompany), new { id = createdCompany.Id }, createdCompany);
+                var createdProject = mapper.Map<ProjectsDTO>(Project);
+                return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);
             }
             catch (Exception ex)
             {
@@ -109,18 +107,18 @@ namespace Company_management_system_b.Controllers
         }
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] UpdateCompanyDTO companyDTO)
+        public async Task<IActionResult> UpdateProject(Guid id, [FromBody] UpdateProjectDTO projectDTO)
         {
             try
             {
-                if (id == Guid.Empty || companyDTO == null)
+                if (id == Guid.Empty || projectDTO == null)
                     return BadRequest("Invalid input");
-                var existingCompany = await unitOfWork.Companies.GetById(id);
-                if (existingCompany == null)
+                var existingProject = await unitOfWork.Projects.GetById(id);
+                if (existingProject == null)
                     return NotFound();
-                mapper.Map(companyDTO, existingCompany);
+                mapper.Map(projectDTO, existingProject);
                
-                unitOfWork.Companies.Update(existingCompany);
+                unitOfWork.Projects.Update(existingProject);
                 await unitOfWork.Commit();
                 return NoContent();
             }

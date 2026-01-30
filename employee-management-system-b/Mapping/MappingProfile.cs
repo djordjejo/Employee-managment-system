@@ -36,24 +36,23 @@ public class MappingProfile : Profile
 
         CreateMap<CreateEmployeeDTO, Employee>()
             .ForMember(dest => dest.Projects, opt => opt.Ignore());
+        CreateMap<UpdateEmployeeDTO, Employee>()
+          .ForMember(dest => dest.Projects, opt => opt.Ignore());
 
         // ============================================
         // Project mappings
         // ============================================
 
         CreateMap<Project, ProjectsDTO>()
-            .ForMember(dest => dest.CompanyName,
-                opt => opt.MapFrom(src => src.Company != null ? src.Company.Name : null))
-            .ForMember(dest => dest.Employees,
-                opt => opt.MapFrom(src => src.Employees
-                    .Where(ep => ep.Employee != null)
-                    .Select(ep => ep.Employee)));  // ✅ Mapira EmployeeProject → Employee
+     .ForMember(dest => dest.Employees,
+         opt => opt.MapFrom(src => src.Employees
+             .Where(ep => ep.Employee != null)
+             .Select(ep => ep.Employee)));
 
         CreateMap<Project, ProjectBasicDTO>();
         CreateMap<Project, ProjectDropdownDTO>();
         CreateMap<Project, UpdateProjectDTO>();
         CreateMap<Project, CreateProjectDTO>();
-        CreateMap<Project, ProjectsDTO>();
         CreateMap<CreateProjectDTO, Project>()
             .ForMember(dest => dest.Employees, opt => opt.Ignore());
 
@@ -68,7 +67,11 @@ public class MappingProfile : Profile
         
         CreateMap<Department, DepartmentDropdownDTO>();
         CreateMap<Department, DepartmentsDTO>().ReverseMap();
-        CreateMap<Department, UpdateCompanyDTO>().ReverseMap();
         CreateMap<Department, CreateDepartmentDTO>().ReverseMap();
+        CreateMap<UpdateDepartmentDTO, Department>()
+                   .ForMember(dest => dest.Id, opt => opt.Ignore())
+                   .ForMember(dest => dest.CompanyId, opt => opt.Ignore())
+                   .ForMember(dest => dest.Company, opt => opt.Ignore())
+                   .ForMember(dest => dest.Employees, opt => opt.Ignore());
     }
 }

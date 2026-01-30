@@ -17,15 +17,16 @@ namespace employee_management_system_b.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        
             base.OnModelCreating(modelBuilder);
 
-            // company relationships
+            // ================================
+            // Company Relationships
+            // ================================
             modelBuilder.Entity<Employee>()
-                  .HasOne(e => e.Company)
-                  .WithMany(c => c.Employees)
-                  .HasForeignKey(e => e.CompanyId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(e => e.Company)
+                .WithMany(c => c.Employees)
+                .HasForeignKey(e => e.CompanyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Department>()
                 .HasOne(d => d.Company)
@@ -40,13 +41,13 @@ namespace employee_management_system_b.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // ================================
-            // Department ↔ Employees
+            // Department ↔ Employees (SAMO JEDNOM!)
             // ================================
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Department)
                 .WithMany(d => d.Employees)
                 .HasForeignKey(e => e.DepartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);  // ✅ SetNull - postavlja DepartmentId na NULL
 
             // ================================
             // EmployeeProject (Many-to-Many) 
@@ -66,7 +67,9 @@ namespace employee_management_system_b.Data
                 .HasForeignKey(ep => ep.ProjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            
+            // ================================
+            // Unique Indexes
+            // ================================
             modelBuilder.Entity<Employee>()
                 .HasIndex(e => e.Email)
                 .IsUnique();
@@ -74,11 +77,6 @@ namespace employee_management_system_b.Data
             modelBuilder.Entity<Company>()
                 .HasIndex(c => c.Email)
                 .IsUnique();
-
-
-
-
         }
-
     }
 }

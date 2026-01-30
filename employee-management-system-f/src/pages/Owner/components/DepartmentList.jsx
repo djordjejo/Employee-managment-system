@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import PopUp from "./PopUp.jsx";
 
 function DepartmentList({searchTerm}){
-
     const [departments, setDepartments] = useState([]);
     const [departmentDetails, setDepartmentDetails] = useState(null);
 
@@ -29,7 +28,7 @@ function DepartmentList({searchTerm}){
         const search = searchTerm.toLowerCase();
         return (
             department.name?.toLowerCase().includes(search) ||
-            department.description?.toLowerCase().includes(search) // Dodao description
+            department.description?.toLowerCase().includes(search)
         );
     });
 
@@ -90,6 +89,7 @@ function DepartmentList({searchTerm}){
                     entity={departmentDetails} 
                     title="Department details" 
                     onClose={() => setDepartmentDetails(null)}
+                    onSuccess={()=> window.location.reload()}
                 />
             )}
         </div>

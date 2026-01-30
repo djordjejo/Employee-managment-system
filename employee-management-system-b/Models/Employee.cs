@@ -13,7 +13,7 @@ namespace employee_management_system_b.Models
         public bool isActive { get; set; }
 
 
-        public Guid DepartmentId { get; set; }
+        public Guid? DepartmentId { get; set; }
         public Department Department { get; set; }
         public Company Company { get; set; }
         public Guid CompanyId{ get; set; }

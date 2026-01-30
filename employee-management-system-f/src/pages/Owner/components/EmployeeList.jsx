@@ -95,10 +95,11 @@ function EmployeeList({ searchTerm }) {
             </table>
 
             {employeeDetails && (
-                <PopUp 
+                <PopUp
                     entity={employeeDetails} 
-                    title={"Employee details:"} 
+                    title={"Employees details:"} 
                     onClose={() => setEmployeeDetails(null)}
+                    onSuccess={() => window.location.reload()}
                 />
             )}
         </div>

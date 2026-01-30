@@ -27,12 +27,8 @@ namespace Department_management_system_b.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DepartmentsDTO>>> GetAll()
         {
-            var departments = await unitOfWork.Departments.GetAll(
-               query => query.Include(e => e.Employees)
-                );
-
+            var departments = await unitOfWork.Departments.GetAll();
             var departmentList = departments.ToList();
-
             var departmentDTO = mapper.Map<List<DepartmentsDTO>>(departmentList);
             return Ok(departmentDTO);
         }
@@ -76,7 +72,7 @@ namespace Department_management_system_b.Controllers
                     return NotFound();
 
                 unitOfWork.Departments.Delete(department);
-                unitOfWork.Commit();
+                await unitOfWork.Commit();
                 return NoContent();
             }
             catch (Exception ex)
@@ -85,8 +81,8 @@ namespace Department_management_system_b.Controllers
             }
 
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentDTO departmentDTO)
+        [HttpPost("CreateDepartment")]
+        public async Task<IActionResult> CreateDepartment( CreateDepartmentDTO departmentDTO)
         {
             try
             {
@@ -95,7 +91,7 @@ namespace Department_management_system_b.Controllers
                var department = mapper.Map<Department>(departmentDTO);
 
                 await unitOfWork.Departments.Add(department);
-                unitOfWork.Commit();
+                await  unitOfWork.Commit();
 
                 var createdDepartment = mapper.Map<DepartmentsDTO>(department);
                 return CreatedAtAction(nameof(GetDepartment), new { id = createdDepartment.Id }, createdDepartment);
@@ -105,28 +101,37 @@ namespace Department_management_system_b.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-        [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateDepartment(Guid id, [FromBody] UpdateDepartmentDTO departmentDTO)
-        {
-            try
+        
+            [HttpPut("UpdateDepartment/{id:guid}")]
+            public async Task<IActionResult> UpdateDepartment(Guid id, [FromBody] UpdateDepartmentDTO departmentDTO)
             {
-                if (id == Guid.Empty || departmentDTO == null)
-                    return BadRequest("Invalid input");
-                var existingDepartment = await unitOfWork.Departments.GetById(id);
-                if (existingDepartment == null)
-                    return NotFound();
-                mapper.Map(departmentDTO, existingDepartment);
-               
-                unitOfWork.Departments.Update(existingDepartment);
-                unitOfWork.Commit();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error: " + ex.Message);
-            }
+                try
+                {
 
+                    if (id == Guid.Empty || departmentDTO == null)
+                        return BadRequest("Invalid input");
+
+                    var department = await unitOfWork.Departments.GetById(id);
+
+                    if (department == null)
+                    {
+                        Console.WriteLine($"❌ Department not found!");
+                        return NotFound();
+                    }
+                    unitOfWork.Departments.Update(department);
+                    await unitOfWork.Commit();
+
+
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error: {ex.Message}");
+                    Console.WriteLine($"❌ Inner: {ex.InnerException?.Message}");
+                    Console.WriteLine($"❌ Stack: {ex.StackTrace}");
+                    return StatusCode(500, new { error = ex.InnerException?.Message ?? ex.Message });
+                }
+            }
         }
     }
-}
+

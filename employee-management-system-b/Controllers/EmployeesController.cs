@@ -42,7 +42,6 @@ namespace employee_management_system_b.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> GetEmployee(Guid id)
         {
-
             try
             {
                 if (id == Guid.Empty)
@@ -78,7 +77,7 @@ namespace employee_management_system_b.Controllers
                     return NotFound();
 
                 unitOfWork.Employees.Delete(employee);
-                unitOfWork.Commit();
+                await unitOfWork.Commit();
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,6 +90,7 @@ namespace employee_management_system_b.Controllers
         [HttpPost("CreateEmployee")]
         public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeDTO employeeDTO)
          {
+            
             try
             {
                 if (employeeDTO == null)
@@ -99,7 +99,7 @@ namespace employee_management_system_b.Controllers
 
                 await unitOfWork.Employees.Add(employee);
                 await unitOfWork.Commit();
-
+                
                 var createdEmployee = mapper.Map<EmployeeDTO>(employee);
                 return CreatedAtAction(nameof(GetEmployee), new { id = createdEmployee.Id }, createdEmployee);
             }
@@ -108,9 +108,8 @@ namespace employee_management_system_b.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-        [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateEmployee(Guid id, [FromBody] UpdateEmployeeDTO employeeDTO)
+        [HttpPut("UpdateEmployee/{id:guid}")]
+        public async Task<IActionResult> UpdateEmployee(Guid id, UpdateEmployeeDTO employeeDTO)
         {
             try
             {
@@ -122,7 +121,7 @@ namespace employee_management_system_b.Controllers
                 mapper.Map(employeeDTO, existingEmployee);
                
                 unitOfWork.Employees.Update(existingEmployee);
-                unitOfWork.Commit();
+                await unitOfWork.Commit();
                 return NoContent();
             }
             catch (Exception ex)

@@ -18,13 +18,11 @@ export default function AddEmployeeForm({ onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch companies and departments on mount
   useEffect(() => {
     fetchCompanies();
     fetchDepartments();
   }, []);
 
-  // Filter departments when company changes
   useEffect(() => {
     if (formData.companyId) {
       const filtered = departments.filter(
@@ -32,7 +30,6 @@ export default function AddEmployeeForm({ onClose, onSuccess }) {
       );
       setFilteredDepartments(filtered);
       
-      // Reset department if it doesn't belong to selected company
       if (formData.departmentId) {
         const deptExists = filtered.some(d => d.id === formData.departmentId);
         console.log('Department exists in selected company:', deptExists);
