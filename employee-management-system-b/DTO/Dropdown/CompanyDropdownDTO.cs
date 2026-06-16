@@ -1,0 +1,8 @@
+﻿namespace employee_management_system_b.DTO.Dropdown
+{
+    public class CompanyDropdownDTO
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
+}
